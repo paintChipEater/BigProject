@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+
+// conect to local host data base -> soon implement MongoDB atlas :)
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.DATABASE_URI, {
