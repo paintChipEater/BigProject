@@ -4,26 +4,21 @@ const mongoose = require('mongoose')
 
 // get all journals
 const getJournals = async (req, res) => {
-    // leave object blank because we want a differnet # of journals
-    // newest on top
+    // Sorts by getting all journals and sort by journal's creation date 
     const journals = await Journal.find({}).sort({createdAt: -1})
 
     res.status(200).json(journals)
 } 
 
-
-
 // get a single journal
 const getJournal = async (req, res) => {
-    // grab id property from ROUTE parameter
+    // grab id property from the route's parameter
     const {id} = req.params
 
     // checks if the ID is valid, if not, return status
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({error: 'No such journal'})
     }
-
-    // use Journal model from JOURNALMODAL
     const journal = await journal.findById(id)
 
     // if journal doesn't exist, return an error
@@ -31,15 +26,15 @@ const getJournal = async (req, res) => {
         // if it doesn't return, it will fire the other code
         return res.status(404).json({error: 'No such journal'})
     }
-    // there is a journal
+    // send the journal to the client to view
     res.status(200).json(journal)
 } 
 
 // create a new journal
 const createJournal = async (req, res) => {
     // extract these objects
-    const {title, journalData} = req.body
-
+    const {title, journal} = req.body
+    console.log(req.body)
     // which fields are empty and send it to client
     let emptyFields = []
 
@@ -47,25 +42,26 @@ const createJournal = async (req, res) => {
     if(!title) {
         emptyFields.push('title')
     }
-    if(!journalData) {
-        emptyFields.push('journalData')
+    if(!journal) {
+        emptyFields.push('journal')
     }
-    // checking length of array -> send error rather than executing it
+    // Checking if the fields are empty, and if they are, send error message to client
     if(emptyFields.length > 0) {
         return res.status(400).json({ error: 'Please fill in all the fields', emptyFields})
     }
 
-    // gets new document when created
-    // USING A journal MODEL TO CREATE A NEW DOCUMENT
-    // ADD DOC TO DB
+    const document = new Journal({
+        title: title,
+        journal: journal
+    })
     try {
         // all properties are required
-        const journal = await Journal.create({title, journalData})
+        const journal = await document.save();
 
         // send a response
-        res.status(200).json(journal)
+        return res.status(200).json(journal)
     } catch (error) {
-        res.status(400).json({error: error.message})
+        return res.status(400).json({error: error.message})
     }
 } 
 

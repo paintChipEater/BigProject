@@ -9,8 +9,7 @@ import { JournalsContextProvider } from './context/JournalContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-
-    {/* WRAPS THE APP COMPONENT SEEN WITH RECIPECONTEXT COMPONENT */}
+    {/* WRAPS THE APP COMPONENT SEEN WITH RECIPE CONTEXT COMPONENT */}
     <JournalsContextProvider>
       <App />
     </JournalsContextProvider>

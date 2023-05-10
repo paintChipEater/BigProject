@@ -3,6 +3,8 @@ import { useJournalsContext } from '../hooks/useJournalsContext'
 
 // date FNS
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import axios from 'axios'
+import { deleteJournalReq, deleteOptions } from '../util/constants'
 
 const JournalDetails = ({ journal }) => {
   const { dispatch } = useJournalsContext()
@@ -11,16 +13,14 @@ const JournalDetails = ({ journal }) => {
   const handleClick = async () => {
     // fetchiing through the url with the id
 
-    // Grabbing the delete request 
-    const response = await fetch('/api/journal/' + journal._id, {
-      method: 'DELETE'
-    })
-    const json = await response.json()
+    // Grabbing the delete request that was already parsed to json 
+    const response = await axios.delete(deleteJournalReq + "/" +journal._id, deleteOptions);
+
     
     // filter through journals until it finds the delete
     // does an action to update the global state as well
-    if (response.ok) {
-      dispatch({type: 'DELETE_RECIPE', payload: json})
+    if (response.status === 200) {
+      dispatch({type: 'DELETE_RECIPE', payload: response})
     }
   }
 

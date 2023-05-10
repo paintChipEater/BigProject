@@ -5,7 +5,7 @@ import { createContext, useReducer } from "react"
 
 export const JournalsContext = createContext()
 
-// updates the STATE when we dispatch an Action -> like in Home component
+// Our reducers are responsible for setting up the context provider with data that is received 
 export const journalsReducer = (state, action) => {
     switch (action.type) {
         // recieve workout
@@ -31,28 +31,17 @@ export const journalsReducer = (state, action) => {
     }
 
 }
-
-// REACT COMPONENT  to wrap the app
-// children -> represents the app component that was wrapped in index.js
+// @params: Using app as the child to access the state throughout all the app
 export const JournalsContextProvider = ({children}) => {
-    // use reducer hook works like useState
-    // the way to update the state is different -> call dispatch function
-
-    // starts as null
-    const [state, dispatch] = useReducer(journalsReducer, {
+    const initialState = {
         journals: null
-    })
-
-    // payload property represents data needed to make the change
-    
-    // when the dispatch is passed -> reducer function is invoked
-    // dispatch({type: 'SET_RECIPES', payload: [{}, {}]})
-
-
-    // component that needs to wrap to parts that need access to context so every component has access to context
+    }
+   
+    // Initial state is null as we don't have any data in the state and set different reducer actions for updating the state
+    const [state, dispatch] = useReducer(journalsReducer, initialState)
     return (
 
-        // This JournalsContext wraps the entire app so we could access 
+        // This JournalsContext wraps the entire app so we could access both the journals state and the reducers across all components of the application
         <JournalsContext.Provider value={{...state, dispatch}}>
             { children }
         </JournalsContext.Provider>

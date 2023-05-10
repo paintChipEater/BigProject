@@ -1,6 +1,5 @@
 // express router
 const express = require('express')
-
 // reference functions from exported functions from JournalController
 const {
     createJournal,
@@ -9,28 +8,24 @@ const {
     deleteJournal,
     updateJournal
 } = require('../controllers/journalController')
-
-
-
 // instance of a router
 const router = express.Router()
 
 // GET all Journals
-router.get('/', getJournals)
+router.get('/get-journals', getJournals)
 
 // GET a single Journal
 // route parameter is the ID
 router.get('/:id', getJournal)
 
 // POST a new Journal
-router.post('/', createJournal)
+router.post('/create-journal', createJournal)
 
 // DELETE a Journal
-router.delete('/:id', deleteJournal)
+router.delete('/delete-journal/:id', deleteJournal)
 
 //UPDATE a Journal
-router.patch('/:id', updateJournal)
-
+router.put('/:id', updateJournal)
 
 // export the routers
 module.exports = router
