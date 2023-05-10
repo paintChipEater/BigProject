@@ -1,39 +1,26 @@
-require('dotenv').config();
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
 const app = express();
-const mongoose = require('mongoose');
-const connectDB = require('./config/connectDB')
-const logger = require('./middleware/httpLogger')
-
-
-
+const PORT = process.env.PORT || 4020;
+const connectDB = require("./config/connectDB");
+const logger = require("./middleware/httpLogger");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 // importing routes
-const journalRoutes = require('./routes/journal')
+const journalRoutes = require("./routes/journal");
 
 //Connect to local DB from component connectDB
 connectDB();
 
 //Some middleware
 app.use(logger);
-app.use(express.json())
-
+app.use(express.json()); // Allow any json data
+app.use(bodyParser.json()); // Parse our data into json instead in our frontend 
+app.use(cors()) // Allow cross-origin requests, meaning allowing the data transfer across the server to client side
 
 // connecting to routes
-app.use('/api/journal', journalRoutes)
+app.use("/journal", journalRoutes);
 
-
-mongoose.connect(process.env.DATABASE_URI)
-
-// when function is completed
-    .then(() => {
-        // listen to a port number
-        // process.env.PORT is pulling the port from the .env file
-        app.listen(process.env.PORT, () => {
-            console.log("listening on port", process.env.PORT)
-        })
-    })
-
-// find error if URI is incorrect or username / password is incorrect
-    .catch((error) => {
-        console.log(error)
-    })
+app.listen(PORT, () => {
+	console.log("listening on port", PORT);
+});

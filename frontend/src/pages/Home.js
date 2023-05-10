@@ -4,6 +4,8 @@ import { useJournalsContext } from "../hooks/useJournalsContext"
 // components
 import JournalDetails from "../components/JournalDetails"
 import JournalForm from "../components/JournalForm"
+import axios from "axios"
+import { getJournalReq } from "../util/constants"
 
 
 const Home = () => {
@@ -13,15 +15,12 @@ const Home = () => {
   useEffect(() => {
     // fetch backend data using the useEffect / Fetch function -> runs once when component renders
     const fetchJournals = async () => {
-      const response = await fetch('/api/journal')
-      
-      const json = await response.json()
-
-      if (response.ok) {
+      const response = await axios.get(getJournalReq);
+      if (response.status === 200) {
         // dispatch to update the global journal context
         // created in Journal Contex
         // The journals function / hook updates then
-        dispatch({type: 'SET_RECIPES', payload: json})
+        dispatch({type: 'SET_RECIPES', payload: response.data})
         
       }
       
